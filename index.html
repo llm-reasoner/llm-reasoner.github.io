@@ -322,6 +322,7 @@
                     <option value="qwen-2.5-7b">Qwen 2.5 7B</option>
                     <option value="llama-2-7b">Llama 2 7B</option>
                     <option value="llama-3-8b" selected>Llama 3 8B</option>
+                    <option value="none">None</option>
                 </select>
             </div>
 
@@ -330,6 +331,8 @@
                 <select id="bestCandCriteria">
                     <option value="reason-answer" selected>Joint</option>
                     <option value="answer">Answer</option>
+                    <option value="token-skip">Token Skip</option>
+                    <option value="surprisal">Surprisal</option>
                 </select>
             </div>
 
@@ -395,7 +398,9 @@
             { teacher: 'qwen-2.5-7b', pruner: 'qwen-2.5-7b', criteria: 'reason-answer' },
             { teacher: 'qwen-2.5-7b', pruner: 'qwen-2.5-7b', criteria: 'answer' },
             { teacher: 'qwen-2.5-7b', pruner: 'llama-2-7b', criteria: 'reason-answer' },
-            { teacher: 'llama-3-8b', pruner: 'llama-3-8b', criteria: 'reason-answer' }
+            { teacher: 'llama-3-8b', pruner: 'llama-3-8b', criteria: 'reason-answer' },
+            { teacher: 'qwen-2.5-7b', pruner: 'none', criteria: 'token-skip' },
+            { teacher: 'qwen-2.5-7b', pruner: 'none', criteria: 'surprisal' }
         ];
 
         function updatePrunerOptions() {
@@ -415,7 +420,8 @@
                 option.value = pruner;
                 option.textContent = pruner === 'qwen-2.5-7b' ? 'Qwen 2.5 7B' : 
                                    pruner === 'llama-2-7b' ? 'Llama 2 7B' : 
-                                   'Llama 3 8B';
+                                   pruner === 'llama-3-8b' ? 'Llama 3 8B' :
+                                   pruner === 'none' ? 'None' : pruner;
                 if (pruner === currentPruner && validPruners.includes(currentPruner)) {
                     option.selected = true;
                 }
@@ -446,7 +452,10 @@
             validCriteria.forEach(criteria => {
                 const option = document.createElement('option');
                 option.value = criteria;
-                option.textContent = criteria === 'reason-answer' ? 'Joint' : 'Answer';
+                option.textContent = criteria === 'reason-answer' ? 'Joint' : 
+                                   criteria === 'answer' ? 'Answer' :
+                                   criteria === 'token-skip' ? 'Token Skip' :
+                                   criteria === 'surprisal' ? 'Surprisal' : criteria;
                 if (criteria === currentCriteria && validCriteria.includes(currentCriteria)) {
                     option.selected = true;
                 }
@@ -656,4 +665,3 @@
     </script>
 </body>
 </html>
-
